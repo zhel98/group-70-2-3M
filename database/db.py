@@ -19,3 +19,11 @@ def add_product_db(name, price, description, photo):
     # cursor.execute(queries.insert_product, (name,))
     conn.commit()
     conn.close()
+    
+def get_all_products():
+    conn = sqlite3.connect(path_db)
+    cursor = conn.cursor()
+    cursor.execute(queries.select_all_products)
+    products = cursor.fetchall()
+    conn.close()
+    return products

@@ -10,5 +10,10 @@ products_table = """
     )
 """
 
+select_all_products = """
+    SELECT id, name, price, description, photo
+    FROM products
+    ORDER BY id
+"""
 
 insert_product = "INSERT INTO products (name, price, description, photo) VALUES (?, ?, ?, ?)"
