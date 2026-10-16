@@ -6,46 +6,40 @@ from aiogram.fsm.state import State, StatesGroup
 
 class Add_anketa(StatesGroup):
     name = State()
-    price = State()
-    description = State()
-    photo = State()
-
-router_add_product = Router ()
-
-
-@router_add_product.message(Command('add_product'))
-async def add_start_fsm(message: Message, state: FSMContext):
-    await message.answer('введите название товара:')
-    await state.set_state(Add_product.name)
+    age = State()
+    phone = State()
     
-@router_add_product.message(Add_product.name)
+router_add_anketa = Router ()
+
+
+@router_add_anketa.message(Command('Add_anketa'))
+async def add_start_fsm(message: Message, state: FSMContext):
+    await message.answer('введите ваше имя:')
+    await state.set_state(Add_anketa.name)
+    
+@router_add_anketa.message(Add_anketa.name)
 async def add_name(message: Message, state: FSMContext):
     await state.update_data(name=message.text)
-    await message.answer('введите цену товарв')
-    await state.set_state(Add_product.price)
+    await message.answer('введите ваш возвраст:')
+    await state.set_state(Add_anketa.age)
     
-@router_add_product.message(Add_product.price)
-async def add_price(message: Message, state: FSMContext):
-    await state.update_data(price=message.text)
-    await message.answer('введите описание товара')
-    await state.set_state(Add_product.description)
+@router_add_anketa.message(Add_anketa.age)
+async def age(message: Message, state: FSMContext):
+    if not message.text.isdigit():
+        await message.answer('введите только цифры')
+        return
+    await state.update_data(age=int(message.text))
+    await message.answer('введите ваш телефон:')
+    await state.set_state(Add_anketa.phone)
 
-@router_add_product.message(Add_product.description)
-async def add_description(message: Message, state: FSMContext):
-    await state.update_data(description=message.text)
-    await message.answer('введите фото товара')
-    await state.set_state(Add_product.photo)
-    
-@router_add_product.message(Add_product.photo)
-async def add_photo(message: Message, state: FSMContext):
-    await state.update_data(photo=message.photo[-1].file_id)
+@router_add_anketa.message(Add_anketa.phone)
+async def add_phone(message: Message, state: FSMContext):
+    await state.update_data(phone=message.text)
     data = await state.get_data()
-    await message.answer_photo(
-    photo=data['photo'],
-    caption=(
-        f"Данные товара:\n"
+    await message.answer(
+        f"Данные анкеты:\n"
         f"Название — {data['name']}\n"
-        f"Цена — {data['price']}\n"
-        f"Описание — {data['description']}"
-    ))
+        f"Цена — {data['age']}\n"
+        f"телефон — {data['phone']}"
+    )
     await state.clear
