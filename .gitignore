@@ -1,6 +1,9 @@
 .idea
 .vscode
 venv/
+.venv/
 .env
 __pycache__/
 .Ds_Store
+database/*.db
+database/*.sqlite3
